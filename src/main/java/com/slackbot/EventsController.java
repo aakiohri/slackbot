@@ -4,11 +4,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/slackbot")
+@RequestMapping("/event")
 public class EventsController {
 
-    @PostMapping(value = "/verify")
-    public ResponseEntity<String> verification(@RequestBody Verification verification) {
-        return ResponseEntity.status(200).body(verification.getChallenge());
+    @PostMapping
+    public ResponseEntity<String> verification(@RequestBody EventRoot event) {
+        return ResponseEntity.status(200).body(event.getChallenge());
     }
 }
