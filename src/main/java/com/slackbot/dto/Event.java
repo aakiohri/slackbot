@@ -1,4 +1,4 @@
-package com.slackbot;
+package com.slackbot.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
