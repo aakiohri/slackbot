@@ -28,16 +28,21 @@ public class JiraIssueService implements IssueService {
 
         String checkIfKeyIsValidRequirementJQL = String.format("?jql=key=%s AND issuetype=Story", text[2]);
 
-        Long total = restTemplate.exchange(configuration.getBaseUrl() + "/rest/api/2/search" + checkIfKeyIsValidRequirementJQL,
-                        HttpMethod.GET,
-                        new HttpEntity<>(null, header), JQLSearchResponse.class)
-                .getBody().getTotal();
+        Long total;
+        try {
+            total = restTemplate.exchange(configuration.getBaseUrl() + "/rest/api/2/search" + checkIfKeyIsValidRequirementJQL,
+                            HttpMethod.GET,
+                            new HttpEntity<>(null, header), JQLSearchResponse.class)
+                    .getBody().getTotal();
+        } catch (Exception ex) {
+            return TeamsResponse.create("Invalid requirement ID or you dont have access to refer to this ID");
+        }
 
         if (total != 1) {
             return TeamsResponse.create("Couldn't find a valid requirement by ID : " + text[2]);
         }
 
-        JiraRequest request = JiraRequest.create(configuration.getProjectKey(), text[0], text[1], text[2].trim(), text[3]);
+        JiraRequest request = JiraRequest.create(configuration.getProjectKey(), text[0], text[1], text[2].trim(), text[3], from);
 
         String key = restTemplate.exchange(configuration.getBaseUrl() + "/rest/api/2/issue/", HttpMethod.POST,
                         new HttpEntity<>(request, header), JiraResponse.class)

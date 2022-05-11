@@ -12,4 +12,8 @@ public class Fields {
     private Project project;
     private String description;
     private ParentDto parent;
+    private String customfield_10030;
+    private String customfield_10031;
+    private Float customfield_10029;
+    private String customfield_10032;
 }
