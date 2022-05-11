@@ -1,6 +1,8 @@
 package com.slackbot.service;
 
+import com.slackbot.dto.TeamsResponse;
+
 public interface IssueService {
 
-    public String create(String text);
+    public TeamsResponse create(String[] text, String from);
 }

@@ -11,4 +11,5 @@ public class Fields {
     private IssueType issuetype;
     private Project project;
     private String description;
+    private ParentDto parent;
 }

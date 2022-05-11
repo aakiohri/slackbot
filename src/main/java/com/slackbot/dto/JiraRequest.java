@@ -9,12 +9,13 @@ public class JiraRequest {
 
     private Fields fields;
 
-    public static JiraRequest create(String summary, String description, String projectKey) {
+    public static JiraRequest create(String projectId, String name, String experience, String reqId, String resumeLink) {
         return new JiraRequest(Fields.builder()
-                .issuetype(new IssueType("Bug"))
-                .project(new Project(projectKey))
-                .summary(summary)
-                .description(description)
+                .issuetype(new IssueType("Subtask"))
+                .project(new Project(projectId))
+                .parent(new ParentDto(reqId))
+                .summary(String.format("%s - %s YOE", name, experience))
+                .description(resumeLink)
                 .build());
     }
 }

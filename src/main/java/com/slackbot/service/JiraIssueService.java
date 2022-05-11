@@ -21,23 +21,29 @@ public class JiraIssueService implements IssueService {
     JiraConfiguration configuration;
 
     @Override
-    public String create(String text) {
-
-        String[] textSplit = text.split("\\|");
-
-        if (textSplit.length < 2) {
-            log.error("text splitting don't have 2 pipe separated text");
-            return "Invalid Text Message";
-        }
-
-        JiraRequest request = JiraRequest.create(textSplit[0], textSplit[1], configuration.getProjectKey());
+    public TeamsResponse create(String[] text, String from) {
 
         HttpHeaders header = new HttpHeaders();
         header.add("Authorization", configuration.getApiKey());
 
-        return restTemplate.exchange(configuration.getBaseUrl() + "/rest/api/2/issue/", HttpMethod.POST,
+        String checkIfKeyIsValidRequirementJQL = String.format("?jql=key=%s AND issuetype=Story", text[2]);
+
+        Long total = restTemplate.exchange(configuration.getBaseUrl() + "/rest/api/2/search" + checkIfKeyIsValidRequirementJQL,
+                        HttpMethod.GET,
+                        new HttpEntity<>(null, header), JQLSearchResponse.class)
+                .getBody().getTotal();
+
+        if (total != 1) {
+            return TeamsResponse.create("Couldn't find a valid requirement by ID : " + text[2]);
+        }
+
+        JiraRequest request = JiraRequest.create(configuration.getProjectKey(), text[0], text[1], text[2].trim(), text[3]);
+
+        String key = restTemplate.exchange(configuration.getBaseUrl() + "/rest/api/2/issue/", HttpMethod.POST,
                         new HttpEntity<>(request, header), JiraResponse.class)
                 .getBody().getKey();
+
+        return TeamsResponse.create("Referral created with ID : " + key + ". Please keep this for id for your reference.");
     }
 
 
