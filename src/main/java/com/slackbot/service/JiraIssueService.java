@@ -25,13 +25,13 @@ public class JiraIssueService implements IssueService {
 
         String[] split = text.split("\\|");
 
-        if (split.length != 4) {
-            return TeamsResponse.create("incorrect referral format, please try with correct format < name | experience | requirementId | resumeUrl > , exclude < >");
+        if (split.length != 5) {
+            return TeamsResponse.create("incorrect referral format, please try with correct format < name | experience | e-mail | requirementId | resumeUrl > , exclude < >");
         }
 
         HttpHeaders header = getHttpHeaders();
 
-        String checkIfKeyIsValidRequirementJQL = String.format("?jql=key=%s AND issuetype=Story", split[2].trim());
+        String checkIfKeyIsValidRequirementJQL = String.format("?jql=key=%s AND issuetype=Story", split[3].trim());
 
         Long total;
         try {
@@ -44,10 +44,10 @@ public class JiraIssueService implements IssueService {
         }
 
         if (total != 1) {
-            return TeamsResponse.create("Couldn't find a valid requirement by ID : " + split[2]);
+            return TeamsResponse.create("Couldn't find a valid requirement by ID : " + split[3]);
         }
 
-        JiraRequest request = JiraRequest.create(configuration.getProjectKey(), split[0], split[1], split[2].trim(), split[3], from);
+        JiraRequest request = JiraRequest.create(configuration.getProjectKey(), split[0], split[1], split[2], split[3].trim(), split[4], from);
 
         String key = restTemplate.exchange(configuration.getBaseUrl() + "/rest/api/2/issue/", HttpMethod.POST,
                         new HttpEntity<>(request, header), JiraResponse.class)

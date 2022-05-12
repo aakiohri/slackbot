@@ -24,5 +24,6 @@ public class Fields {
     private String customfield_10031;
     private Float customfield_10029;
     private String customfield_10032;
+    private String customfield_10038;
     private Status status;
 }

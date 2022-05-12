@@ -9,7 +9,7 @@ public class JiraRequest {
 
     private Fields fields;
 
-    public static JiraRequest create(String projectId, String name, String experience, String reqId, String resumeLink,
+    public static JiraRequest create(String projectId, String name, String experience, String email, String reqId, String resumeLink,
                                      String from) {
         return new JiraRequest(Fields.builder()
                 .issuetype(new IssueType("Sub-task"))
@@ -21,6 +21,7 @@ public class JiraRequest {
                 .customfield_10030(from)
                 .customfield_10031(name)
                 .customfield_10032(resumeLink)
+                .customfield_10038(email)
                 .build());
     }
 }
