@@ -26,19 +26,17 @@ public class TeamsEventController {
         String text = Objects.isNull(event.getText()) ? "" :
                 Jsoup.parse(event.getText()).text().replaceFirst("referbuddy", "");
 
-        String[] split = text.split("\\|");
+        log.info("Text after html parsing : {}", text);
 
-        if (split.length != 4) {
-            return ResponseEntity.status(200)
-                    .body(TeamsResponse.create("incorrect referral format, please try with correct format < name | experience | requirementId | resumeUrl > , exclude < >"));
-        }
-
-        TeamsResponse teamsResponse = service.create(split, event.getFrom().getName());
+        TeamsResponse teamsResponse = text.trim().toLowerCase().contains("status") ?
+                service.status(text, event.getFrom().getName()) :
+                service.create(text, event.getFrom().getName());
 
         log.info("response message : {}", teamsResponse.getMessage());
 
         return ResponseEntity.status(200).body(teamsResponse);
     }
+
 
     @GetMapping
     public String hello() {

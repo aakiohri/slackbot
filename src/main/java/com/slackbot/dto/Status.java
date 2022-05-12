@@ -8,9 +8,11 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@AllArgsConstructor
-public class IssueType {
+public class Status {
+
     private String name;
+
 }
